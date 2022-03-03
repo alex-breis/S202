@@ -5,11 +5,11 @@ https://determined-zebra-b82.notion.site/Bancos-de-dados-II-580c835e83554a9b9300
 
 
 ## Como executar?
-3. Instale as dependências:
+1. Instale as dependências:
     ```sh
     pip install -r requirements.txt
     ```
-4. Execute o arquivo `main.py`
+2. Execute o arquivo `main.py`
     ```sh
     python main.py
     ```
