@@ -1,16 +1,23 @@
-# Instalem os pacotes no terminal dessa forma: python -m pip install pymongo dnspython
+from typing import Collection
 import pymongo
 from dataset.pokemon_dataset import dataset
+import dotenv
+import os
+
+dotenv.load_dotenv(dotenv.find_dotenv())
 
 class Database:
-    def __init__(self):
+    def __init__(self, database, collection):
+        connectionString = os.getenv("string_conexao")
         self.clusterConnection = pymongo.MongoClient(
-            "mongodb+srv://root:root@cluster0.wucxi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-						tlsAllowInvalidCertificates=True # CASO OCORRA O ERRO [SSL_INVALID_CERTIFICATE]
+            connectionString,
+            tlsAllowInvalidCertificates=True # CASO OCORRA O ERRO [SSL_INVALID_CERTIFICATE]
         )
-        self.db = self.clusterConnection['pokemon']
-        self.db.drop_collection('pokemon')
-        self.collection = self.db['pokemons']
+        self.db = self.clusterConnection[database]
+        self.collection = self.db[collection]
+
+    def resetDatabase(self):
+        self.db.drop_collection(self.collection)
         self.collection.insert_many(dataset)
 
     def executeQuery(self, filters: dict):
@@ -21,7 +28,7 @@ class Database:
         return pokemons
 
     def getAllPokemons(self):
-        response = self.collection.find({},{"name": 1, "_id": 0})
+        response = self.collection.find({}, {"name": 1, "_id": 0})
         pokemons = []
         for pokemon in response:
             pokemons.append(pokemon)
@@ -38,7 +45,8 @@ class Database:
         return result
 
     def getPokemonsByType(self, type: list):
-        response = self.collection.find({ "type": {"$all": type} },{"_id": 0, "name": 1, "type": 1})
+        response = self.collection.find({"type": {"$all": type}}, {
+                                        "_id": 0, "name": 1, "type": 1})
         result = []
         for pokemon in response:
             result.append(pokemon)
