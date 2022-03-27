@@ -10,6 +10,7 @@ db.create(3,"Wuthering Heights","Emily Bronte", 1847, 40.0)
 
 # db.update(2,35.0)
 # db.delete(1)
+# index: ano 1(asc)
 
 livros = db.read()
 
