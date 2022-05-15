@@ -18,7 +18,7 @@ carros = Database(
 )
 # carros.resetDatabase()
 
-# result1 = carros.collection.aggregate([
+# resultado = carros.collection.aggregate([
 #     {"$lookup":
 #         {
 #             "from": "pessoas",  # outra colecao
@@ -34,7 +34,7 @@ produtos = Database(
     collection="produtos",
     dataset=produto_dataset
 )
-produtos.resetDatabase()
+# produtos.resetDatabase()
 
 resultado = produtos.collection.aggregate([
     {"$lookup":
@@ -49,7 +49,7 @@ resultado = produtos.collection.aggregate([
         "$group": {"_id": "$Cliente", "total": {"$sum": "$total"} } 
     },
     {"$sort": {"total": 1} },
-    {"$unwind": '$_id'},
+    {"$unwind": '$_id'},  #Tira a pessoa do array
     {"$project": {
         "_id": 0,
         "nome": "$_id.nome",
